@@ -1,0 +1,38 @@
+# EMBEDDED SERVER CONFIGURATION (ServerProperties)
+server:
+  port: 8080
+
+# LOGGING
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+  file:
+    path: logs
+    name: logs/${spring.application.name}.log
+
+#Eureka
+eureka:
+  client:
+  service-url:
+    defaultZone: http://localhost:8761/eureka/
+
+## Gateway
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: service-products
+          uri: lb://service-products
+          predicates:
+            - Path=/products/**
+        - id: service-customers
+          uri: lb://service-customers
+          predicates:
+            - Path=/customers/**
+        - id: service-shopping
+          uri: lb://service-shopping
+          predicates:
+            - Path=/invoices/**

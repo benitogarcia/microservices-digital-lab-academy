@@ -1,0 +1,101 @@
+####
+#### Microservicios
+####
+
+	* Crear todos los revicios rest y sus valdiaciones.
+
+	* ##### Configurar config cliente
+
+		- Dependecia: Config Client, Bootstrap
+
+	* ##### Configurar Eureka server.
+
+		- Dependencias: eureka-client
+
+		- se agrega configuracion de eureka(localhost:8761/eureka/)
+
+		- Clase principal: @EnableEurekaClient
+
+	* ##### Feig (client-rest, Eureka, Hystrix, Ribbon) (Solo donde un microservicios llama a otro microservicos)
+
+		- Dependencias: OpenFeign.
+
+		- Clase principal: @EnableFeignClients
+
+		- Crear las interfaces de los cientes. (Como esta en los metodos controller)
+
+		- Clase cliente: @FeignClient(name = "name-service", fallback = CustomerHystrixFallbackFactory.class)
+
+	* #####
+	* ##### Hystrix (Solo donde se usa Fieg)
+
+		- dependencias: Hystrix, Hystrix-bashboard, Actuator, Circuit Breaker (TAS)
+
+		- Clase principal: @EnableHystrix, @EnableHystrixDashboard
+
+		- Crear clase del Fallback: @Component, Clase que implemente nuestro CLaseClient (Rest-Client).
+
+		- Se le agrega a la clase cliente la clase creada: fallback = CustomerHystrixFallbackFactory.class
+
+	* #####
+	* ##### Actuator
+
+		- Dependencias: actuator
+
+		- properties: management.endpoints.web.exposure.include="*"
+
+	* #####
+	* ##### service-admin-actuator
+
+		- Dependecias: Spring Boot Admin (Client)
+
+		- Properties, conexion con el amdin-server: spring.boot.admin.client.url=http://localhost:8086
+
+
+####
+#### service-config
+####
+	
+	* Dependencias
+
+		- Config Server
+
+	* Configuracion
+
+		- Clase principal: @EnableConfigServer
+		- Cambiar nombre del properties a bootstrap
+		- Copiar los archivos de configuracion de los microservicios con su respectivo nombre.
+
+	* Security
+		- Los datos de usuarios.
+
+
+### 
+### registry-service-eureka
+### 
+	
+	* Dependenicas: Eureka-server, config-client, bootstrap
+
+	* Clase principal: @EnableEurekaServer
+
+	* Configuracion de properties.
+
+
+### 
+### gateway-service
+### 
+	
+	* Dependenicas: Gateway, Config Client, Eureka Discovery Client (spring-cloud-starter-bootstrap)
+
+	* Clase principal: @EnableEurekaServer
+
+	* Propiedades de los microservicios.
+
+###
+### service-admin-actuator
+###
+
+	* Dependencias: Spring Boot Admin (Server)
+
+	* Clase principal: @EnableAdminServer
+
